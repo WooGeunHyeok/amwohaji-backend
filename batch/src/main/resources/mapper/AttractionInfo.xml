@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.amwohaji.batch.mapper.AttractionInfoMapper">
+
+    <resultMap id="AttractionInfoResultMap" type="com.amwohaji.batch.entity.AttractionInfo">
+        <result property="attraction_id"      column="ATTRACTION_ID"/>
+        <result property="baseYm"             column="BASE_YM"/>
+        <result property="title"              column="TITLE"/>
+        <result property="attraction_type_id" column="ATTRACTION_TYPE_ID"/>
+        <result property="mapX"               column="MAP_X"/>
+        <result property="mapY"               column="MAP_Y"/>
+        <result property="areaCd"             column="AREACD"/>
+        <result property="areaNm"             column="AREANM"/>
+        <result property="signguCd"           column="SIGNGUCD"/>
+        <result property="signguNm"           column="SIGNGUNM"/>
+        <result property="category_l"         column="CATEGORY_L"/>
+        <result property="category_m"         column="CATEGORY_M"/>
+        <result property="category_s"         column="CATEGORY_S"/>
+        <result property="addr1"              column="ADDR1"/>
+        <result property="addr2"              column="ADDR2"/>
+        <result property="zipcode"            column="ZIPCODE"/>
+        <result property="tel"                column="TEL"/>
+        <result property="first_image"        column="FIRST_IMAGE"/>
+        <result property="first_image2"       column="FIRST_IMAGE2"/>
+
+        <result property="insDate"            column="INSDATE"/>
+        <result property="insid"              column="INSID"/>
+        <result property="updDate"            column="UPDDATE"/>
+        <result property="updid"              column="UPDID"/>
+    </resultMap>
+
+    <insert id="insertOrUpdateAttractionInfo" parameterType="com.amwohaji.batch.entity.AttractionInfo">
+        INSERT INTO TBL_ATTRACTION_INFO (
+            ATTRACTION_ID,
+            BASE_YM,
+            TITLE,
+            ATTRACTION_TYPE_ID,
+            MAP_X,
+            MAP_Y,
+            AREACD,
+            AREANM,
+            SIGNGUCD,
+            SIGNGUNM,
+            CATEGORY_L,
+            CATEGORY_M,
+            CATEGORY_S,
+            ADDR1,
+            ADDR2,
+            ZIPCODE,
+            TEL,
+            FIRST_IMAGE,
+            FIRST_IMAGE2,
+            INSDATE,
+            INSID,
+            UPDDATE,
+            UPDID
+        ) VALUES (
+                 #{attraction_id},
+                 #{baseYm},
+                 #{title},
+                 #{attraction_type_id},
+                 #{mapX},
+                 #{mapY},
+                 #{areaCd},
+                 #{areaNm},
+                 #{signguCd},
+                 #{signguNm},
+                 #{category_l},
+                 #{category_m},
+                 #{category_s},
+                 #{addr1},
+                 #{addr2},
+                 #{zipcode},
+                 #{tel},
+                 #{first_image},
+                 #{first_image2},
+                 NOW(),
+                 IFNULL(#{insid}, 'BATCH'),
+                 NOW(),
+                 IFNULL(#{updid}, 'BATCH')
+                 )
+            ON DUPLICATE KEY UPDATE
+                 BASE_YM            = VALUES(BASE_YM),
+                 TITLE              = VALUES(TITLE),
+                 ATTRACTION_TYPE_ID = VALUES(ATTRACTION_TYPE_ID),
+                 MAP_X              = VALUES(MAP_X),
+                 MAP_Y              = VALUES(MAP_Y),
+                 AREACD             = VALUES(AREACD),
+                 AREANM             = VALUES(AREANM),
+                 SIGNGUCD           = VALUES(SIGNGUCD),
+                 SIGNGUNM           = VALUES(SIGNGUNM),
+                 CATEGORY_L         = VALUES(CATEGORY_L),
+                 CATEGORY_M         = VALUES(CATEGORY_M),
+                 CATEGORY_S         = VALUES(CATEGORY_S),
+                 ADDR1              = VALUES(ADDR1),
+                 ADDR2              = VALUES(ADDR2),
+                 ZIPCODE            = VALUES(ZIPCODE),
+                 TEL                = VALUES(TEL),
+                 FIRST_IMAGE        = VALUES(FIRST_IMAGE),
+                 FIRST_IMAGE2       = VALUES(FIRST_IMAGE2),
+                 UPDDATE            = NOW(),
+                 UPDID              = VALUES(UPDID)
+    </insert>
+</mapper>

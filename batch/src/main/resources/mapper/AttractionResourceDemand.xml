@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.amwohaji.batch.mapper.AttractionResourceDemandMapper">
+
+    <resultMap id="AttractionResourceDemandResultMap" type="com.amwohaji.batch.entity.AttractionResourceDemand">
+        <id     property="hubTatsCd"       column="HUB_TATS_CD"/>
+        <result property="baseYm"          column="BASE_YM"/>
+        <result property="mapX"            column="MAP_X"/>
+        <result property="mapY"            column="MAP_Y"/>
+        <result property="areaCd"          column="AREACD"/>
+        <result property="areaNm"          column="AREANM"/>
+        <result property="signguCd"        column="SIGNGUCD"/>
+        <result property="signguNm"        column="SIGNGUNM"/>
+        <result property="hubTatsNm"       column="HUB_TATS_NM"/>
+        <result property="hubCtgryLclsNm"  column="HUB_CTGRY_LCLS_NM"/>
+        <result property="hubCtgryMclsNm"  column="HUB_CTGRY_MCLS_NM"/>
+        <result property="hubRank"         column="HUBRANK"/>
+
+        <result property="insdate"    column="INSDATE"/>
+        <result property="insid"      column="INSID"/>
+        <result property="upddate"    column="UPDDATE"/>
+        <result property="updid"      column="UPDID"/>
+    </resultMap>
+
+    <select id="findByCode" resultMap="AttractionResourceDemandResultMap">
+        SELECT
+            BASE_YM, MAP_X, MAP_Y, AREACD, AREANM, SIGNGUCD, SIGNGUNM, HUB_TATS_CD, HUB_TATS_NM,
+            HUB_CTGRY_LCLS_NM, HUB_CTGRY_MCLS_NM, HUBRANK,
+            INSDATE, INSID, UPDDATE, UPDID
+        FROM TBL_LOCAL_CENTRAL_ATTRACTION_INFO
+        WHERE HUB_TATS_CD = #{hubTatsCd}
+    </select>
+
+    <select id="findAllByCodes" resultMap="AttractionResourceDemandResultMap">
+        SELECT
+        BASE_YM, MAP_X, MAP_Y, AREACD, AREANM, SIGNGUCD, SIGNGUNM, HUB_TATS_CD, HUB_TATS_NM,
+        HUB_CTGRY_LCLS_NM, HUB_CTGRY_MCLS_NM, HUBRANK,
+        INSDATE, INSID, UPDDATE, UPDID
+        FROM TBL_LOCAL_CENTRAL_ATTRACTION_INFO
+        WHERE HUB_TATS_CD IN
+        <foreach item="hubTatsCd" collection="hubTatsCds" open="(" separator="," close=")">
+            #{hubTatsCd}
+        </foreach>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO TBL_LOCAL_CENTRAL_ATTRACTION_INFO (
+            BASE_YM, MAP_X, MAP_Y, AREACD, AREANM, SIGNGUCD, SIGNGUNM, HUB_TATS_CD, HUB_TATS_NM,
+            HUB_CTGRY_LCLS_NM, HUB_CTGRY_MCLS_NM, HUBRANK,
+            INSDATE, INSID, UPDDATE, UPDID
+        ) VALUES (
+                     #{baseYm}, #{mapX}, #{mapY}, #{areaCd}, #{areaNm}, #{signguCd}, #{signguNm}, #{hubTatsCd}, #{hubTatsNm},
+                     #{hubCtgryLclsNm}, #{hubCtgryMclsNm}, #{hubRank},
+                     #{insdate}, #{insid}, #{upddate}, #{updid})
+    </insert>
+
+    <update id="update">
+        UPDATE TBL_LOCAL_CENTRAL_ATTRACTION_INFO
+        SET BASE_YM           = #{baseYm},
+            MAP_X             = #{mapX},
+            MAP_Y             = #{mapY},
+            AREACD            = #{areaCd},
+            AREANM            = #{areaNm},
+            SIGNGUCD          = #{signguCd},
+            SIGNGUNM          = #{signguNm},
+            HUB_TATS_NM       = #{hubTatsNm},
+            HUB_CTGRY_LCLS_NM = #{hubCtgryLclsNm},
+            HUB_CTGRY_MCLS_NM = #{hubCtgryMclsNm},
+            HUBRANK           = #{hubRank},
+            UPDDATE           = #{upddate},
+            UPDID             = #{updid}
+        WHERE HUB_TATS_CD = #{hubTatsCd}
+    </update>
+
+</mapper>

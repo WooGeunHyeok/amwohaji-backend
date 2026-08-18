@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.amwohaji.batch.mapper.RegionalAttractionDemandMapper">
+
+    <resultMap id="RegionalAttractionDemand" type="com.amwohaji.batch.entity.RegionalAttractionDemand">
+        <result property="baseYm"           column="BASE_YM"/>
+        <result property="areaCd"           column="AREA_CD"/>
+        <result property="areaNm"           column="AREA_NM"/>
+        <result property="signguCd"         column="SIGNGU_CD"/>
+        <result property="signguNm"         column="SIGNGU_NM"/>
+        <result property="demandDivCd"      column="DEMAND_DIV_CD"/>
+        <result property="tarSvcDemIxCd"    column="TAR_SVC_DEMIX_CD"/>
+        <result property="tarSvcDemIxNm"    column="TAR_SVC_DEMIX_NM"/>
+        <result property="tarSvcDemIxVal"   column="TAR_SVC_DEMIX_VAL"/>
+        <result property="culResDemIxCd"    column="CUL_RES_DEMIX_CD"/>
+        <result property="culResDemIxNm"    column="CUL_RES_DEMIX_NM"/>
+        <result property="culResDemIxVal"   column="CUL_RES_DEMIX_VAL"/>
+        <result property="insDate"          column="INSDATE"/>
+        <result property="insId"            column="INSID"/>
+        <result property="updDate"          column="UPDDATE"/>
+        <result property="updId"            column="UPDID"/>
+    </resultMap>
+
+    <insert id="insertOrUpdateRegionalAttractionDemand" parameterType="com.amwohaji.batch.entity.RegionalAttractionDemand">
+        INSERT INTO TBL_REGIONAL_ATTRACTION_DEMAND (
+            BASE_YM,
+            AREA_CD,
+            AREA_NM,
+            SIGNGU_CD,
+            SIGNGU_NM,
+            DEMAND_DIV_CD,
+            TAR_SVC_DEMIX_CD,
+            TAR_SVC_DEMIX_NM,
+            TAR_SVC_DEMIX_VAL,
+            CUL_RES_DEMIX_CD,
+            CUL_RES_DEMIX_NM,
+            CUL_RES_DEMIX_VAL,
+            INSDATE,
+            INSID,
+            UPDDATE,
+            UPDID
+        ) VALUES (
+                 #{baseYm},
+                 #{areaCd},
+                 #{areaNm},
+                 #{signguCd},
+                 #{signguNm},
+                 #{demandDivCd},
+
+                 #{tarSvcDemIxCd},
+                 #{tarSvcDemIxNm},
+                 #{tarSvcDemIxVal},
+
+                 #{culResDemIxCd},
+                 #{culResDemIxNm},
+                 #{culResDemIxVal},
+
+                 NOW(),
+                 'BATCH',
+                 NOW(),
+                 'BATCH'
+                 )
+            ON DUPLICATE KEY UPDATE
+                 AREA_NM = VALUES(AREA_NM),
+                 SIGNGU_NM = VALUES(SIGNGU_NM),
+
+                 TAR_SVC_DEMIX_NM = VALUES(TAR_SVC_DEMIX_NM),
+                 TAR_SVC_DEMIX_VAL = VALUES(TAR_SVC_DEMIX_VAL),
+
+                 CUL_RES_DEMIX_NM = VALUES(CUL_RES_DEMIX_NM),
+                 CUL_RES_DEMIX_VAL = VALUES(CUL_RES_DEMIX_VAL),
+
+                 UPDDATE = NOW(),
+                 UPDID = 'BATCH'
+    </insert>
+
+</mapper>
