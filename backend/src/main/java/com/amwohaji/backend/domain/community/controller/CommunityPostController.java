@@ -116,4 +116,30 @@ public class CommunityPostController {
         CommunityPostDetailResponseDto responseDto = communityService.getPostDetail(principal.getUserId(), postId);
         return ResponseEntity.ok(ApiResponse.ok("게시물 상제 조회가 완료되었습니다.", responseDto));
     }
+
+    /**
+     * [API] 게시물 좋아요 등록
+     * POST http://localhost:8080/api/v1/community/posts/{postId}/likes
+     */
+    @PostMapping("/{postId}/likes")
+    public ResponseEntity<ApiResponse<Long>> likePost(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable("postId") Long postId) {
+
+        Long likePostId = communityService.likePost(principal.getUserId(), postId);
+        return ResponseEntity.ok(ApiResponse.ok("게시물 좋아요 등록 완료되었습니다.", likePostId));
+    }
+
+    /**
+     * [API] 게시물 좋아요 취소
+     * POST http://localhost:8080/api/v1/community/posts/{postId}/likes/cancel
+     */
+    @PostMapping("/{postId}/likes/cancel")
+    public ResponseEntity<ApiResponse<Void>> cancelLikePost(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable("postId") Long postId) {
+
+        communityService.cancelLikePost(principal.getUserId(), postId);
+        return ResponseEntity.ok(ApiResponse.ok("게시물 좋아요 취소되었습니다.", null));
+    }
 }
