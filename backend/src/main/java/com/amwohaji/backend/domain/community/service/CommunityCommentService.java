@@ -11,6 +11,9 @@ import com.amwohaji.backend.global.exception.ErrorCode;
 import com.amwohaji.backend.global.file.dto.AttachmentResponseDto;
 import com.amwohaji.backend.global.file.entity.AttachmentReferenceType;
 import com.amwohaji.backend.global.file.service.FileStorageService;
+import com.amwohaji.backend.global.like.entity.Like;
+import com.amwohaji.backend.global.like.entity.LikeReferenceType;
+import com.amwohaji.backend.global.like.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +34,7 @@ public class CommunityCommentService {
 
     private final CommunityPostRepository communityPostRepository;
     private final CommunityCommentRepository communityCommentRepository;
+    private final LikeRepository likeRepository;
     private final FileStorageService fileStorageService;
 
     /**
@@ -115,7 +119,6 @@ public class CommunityCommentService {
         }
 
         if (hasUploadFiles(files)) {
-            fileStorageService.deleteAllByReference(AttachmentReferenceType.COMMENT, commentId);
             fileStorageService.storeAll(
                     files,
                     AttachmentReferenceType.COMMENT,
@@ -174,6 +177,37 @@ public class CommunityCommentService {
             }
         }
         return rootComment;
+    }
+
+    /**
+     * 게시물 댓글 좋아요 등록
+     */
+    @Transactional
+    public long likeComment(Long userId, Long commentId) {
+        communityCommentRepository.findByCommentIdAndIsDeleted(commentId, "N")
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        if (likeRepository.existsByUserIdAndReferenceTypeAndReferenceId(userId, LikeReferenceType.COMMUNITY_COMMENT, commentId)) {
+            throw new CustomException(ErrorCode.DUPLICATE_LIKE);
+        }
+
+        Like likeComment = likeRepository.save(Like.create(userId, LikeReferenceType.COMMUNITY_COMMENT, commentId));
+        return likeComment.getLikeId();
+    }
+
+    /**
+     * 게시물 댓글 좋아요 취소
+     */
+    @Transactional
+    public void cancelLikeComment(Long userId, Long commentId) {
+        communityCommentRepository.findByCommentIdAndIsDeleted(commentId, "N")
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        if (!likeRepository.existsByUserIdAndReferenceTypeAndReferenceId(userId, LikeReferenceType.COMMUNITY_COMMENT, commentId)) {
+            throw new CustomException(ErrorCode.LIKE_NOT_FOUND);
+        }
+
+        likeRepository.deleteByUserIdAndReferenceTypeAndReferenceId(userId, LikeReferenceType.COMMUNITY_COMMENT, commentId);
     }
 
     private List<AttachmentResponseDto> findCommentAttachments(Long commentId) {

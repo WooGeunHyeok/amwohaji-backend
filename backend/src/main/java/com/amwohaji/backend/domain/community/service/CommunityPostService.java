@@ -8,6 +8,9 @@ import com.amwohaji.backend.global.exception.ErrorCode;
 import com.amwohaji.backend.global.file.dto.AttachmentResponseDto;
 import com.amwohaji.backend.global.file.entity.AttachmentReferenceType;
 import com.amwohaji.backend.global.file.service.FileStorageService;
+import com.amwohaji.backend.global.like.entity.Like;
+import com.amwohaji.backend.global.like.entity.LikeReferenceType;
+import com.amwohaji.backend.global.like.repository.LikeRepository;
 import com.amwohaji.backend.global.response.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ public class CommunityPostService {
 
     private final CommunityPostRepository communityPostRepository;
     private final FileStorageService fileStorageService;
+    private final LikeRepository likeRepository;
 
     /**
      * 게시물 등록
@@ -198,6 +202,37 @@ public class CommunityPostService {
                 .attachments(attachments)
                 .isOwner(isOwner)
                 .build();
+    }
+
+    /**
+     * 게시물 좋아요 등록
+     */
+    @Transactional
+    public Long likePost(Long userId, Long postId) {
+        communityPostRepository.findByPostIdAndIsDeleted(postId, "N")
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (likeRepository.existsByUserIdAndReferenceTypeAndReferenceId(userId, LikeReferenceType.COMMUNITY_POST, postId)) {
+            throw new CustomException(ErrorCode.DUPLICATE_LIKE);
+        }
+
+        Like likePost = likeRepository.save(Like.create(userId, LikeReferenceType.COMMUNITY_POST, postId));
+        return likePost.getLikeId();
+    }
+
+    /**
+     * 게시물 좋아요 취소
+     */
+    @Transactional
+    public void cancelLikePost(Long userId, Long postId) {
+        communityPostRepository.findByPostIdAndIsDeleted(postId, "N")
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!likeRepository.existsByUserIdAndReferenceTypeAndReferenceId(userId, LikeReferenceType.COMMUNITY_POST, postId)) {
+            throw new CustomException(ErrorCode.LIKE_NOT_FOUND);
+        }
+
+        likeRepository.deleteByUserIdAndReferenceTypeAndReferenceId(userId, LikeReferenceType.COMMUNITY_POST, postId);
     }
 
     private boolean hasUploadFiles(List<MultipartFile> files) {

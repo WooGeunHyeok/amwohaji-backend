@@ -38,7 +38,11 @@ public enum ErrorCode {
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "CP002", "존재하지 않는 게시물입니다."),
 
     // Community Comment
-    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "CC001", "존재하지 않거나 회원 정보가 불일치 합니다.");
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "CC001", "존재하지 않거나 회원 정보가 불일치 합니다."),
+
+    // Like
+    DUPLICATE_LIKE(HttpStatus.CONFLICT, "L001", "이미 좋아요를 누른 항목입니다."),
+    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "L002", "좋아요를 누르지 않은 항목입니다.");
 
     private final HttpStatus status;
     private final String code;
