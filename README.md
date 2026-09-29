@@ -2,11 +2,20 @@
 
 > 여행 계획이 번거로운 사용자를 위한 여행 코스 추천 서비스
 
-한국관광콘텐츠랩 공모전 출품을 위해 개발 중인 (26.10.28 최종 심사)
-여행 코스 추천 서비스의 백엔드 개발을 담당했습니다.
+한국관광콘텐츠랩 공모전 출품을 위해 개발한 여행 코스 추천 서비스의 백엔드 개발을 담당했습니다 (26.09.21 제출 완료, 26.10.28 최종 심사 예정).
 
 공공데이터 API를 활용한 관광 데이터 수집·적재와
 Spring Boot 기반 REST API 개발을 진행했습니다.
+
+---
+
+## 서비스 화면
+
+[원스토어](https://m.onestore.co.kr/v2/ko-kr/app/0001008914)에 출시된 앱 화면입니다. 이 저장소는 그중 백엔드·배치 담당 영역만 정리한 것입니다.
+
+| 홈 | 관광지 상세 | 커뮤니티 (담당 API) | 코스 추천 일정 |
+| :---: | :---: | :---: | :---: |
+| <img src="docs/screenshots/01-home.jpg" width="200"> | <img src="docs/screenshots/02-place-detail.jpg" width="200"> | <img src="docs/screenshots/03-community.jpg" width="200"> | <img src="docs/screenshots/04-course.jpg" width="200"> |
 
 ---
 
